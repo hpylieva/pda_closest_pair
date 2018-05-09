@@ -42,11 +42,10 @@ def _brute_closest_pair_finder(X):
         return p1, p2, min_dist
     for i in range(len_X - 1):
         for j in range(i + 1, len_X):
-            if i != 0 and j != 1:
-                d = distance(X[i, :], X[j, :])
-                if d < min_dist:  # Update min_dist and points
-                    min_dist = d
-                    p1, p2 = X[i, :], X[j, :]
+            d = distance(X[i, :], X[j, :])
+            if d < min_dist:  # Update min_dist and points
+                min_dist = d
+                p1, p2 = X[i, :], X[j, :]
     return p1, p2, min_dist
 
 
@@ -61,9 +60,11 @@ def _boundary_merge(X, distances, point_pairs, xm):
     """
 
     min_d = min(distances)  # min_d is minimum distance so far
-    M_ind = np.where(
-        (X[:, 0] >= (xm - min_d)) & (X[:, 0] <= (xm + min_d)))  # pair_with_min_d = point_pairs[distances.index(d)]
+    M_ind = np.where((X[:, 0] >= (xm - min_d)) & (X[:, 0] <= (xm + min_d)))  # pair_with_min_d = point_pairs[distances.index(d)]
+    # print(X.shape)
+    # print("M",M_ind)
     M = X[M_ind]
+    # print(M)
     p1, p2, d_M = _brute_closest_pair_finder(M)  # d_M is minimum distance found on boundary
     if d_M not in distances:
         distances.append(d_M)
@@ -95,6 +96,8 @@ def closest_pair(points, return_dict=None, verbose=False):
         return_dict[n] = (sort_by_y(points), _brute_closest_pair_finder(points))
     else:
         x_median = medianSearch(points[:, 0])
+        if verbose:
+            print("Median on this step", x_median)
         left = points[np.where(points[:, 0] < x_median)]
         right = points[np.where(points[:, 0] >= x_median)]
         jobs = []
@@ -156,6 +159,6 @@ if __name__ == "__main__":
     np.random.seed(123)
     input_points = (np.random.randn(ARRAY_SIZE, 2) * 100).astype(int)
     write_to_file(input_points, "input")
-    plot_points(input_points, "input", True)
+    plot_points(input_points, "input", False)
     result = closest_pair(input_points, verbose=True)
     print("\n\nRESULT: \nThe closed pair:{0} and {1}\nDistance: {2:.5f}".format(result[0], result[1], result[2]))
