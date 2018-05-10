@@ -61,10 +61,7 @@ def _boundary_merge(X, distances, point_pairs, xm):
 
     min_d = min(distances)  # min_d is minimum distance so far
     M_ind = np.where((X[:, 0] >= (xm - min_d)) & (X[:, 0] <= (xm + min_d)))  # pair_with_min_d = point_pairs[distances.index(d)]
-    # print(X.shape)
-    # print("M",M_ind)
     M = X[M_ind]
-    # print(M)
     p1, p2, d_M = _brute_closest_pair_finder(M)  # d_M is minimum distance found on boundary
     if d_M not in distances:
         distances.append(d_M)
